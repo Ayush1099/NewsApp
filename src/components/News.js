@@ -30,20 +30,30 @@ export class News extends Component {
 
   async componentDidMount() {
     console.log("Component Did Mount");
-    let url =
-      `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=1&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url); //fetching api
-    console.log(data);
-    console.log(
-      "After fetching the url the Data needs to be extracted from it"
-    );
-    let parsedData = await data.json();
-    console.log(parsedData);
 
+    let url =`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=1&pageSize=${this.props.pageSize}`;
+
+    let data = await fetch(url); //fetching api
+
+    console.log(data);
+
+    let parsedData = await data.json();// extracting data
+
+    console.log(parsedData);
+    let count=0;
     this.setState({ 
         articles: parsedData.articles,
-        totalResults: parsedData.totalResults 
+        totalResults: parsedData.totalResults,
+        count:count+1
+
     });
+
+    this.setState({ 
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+      count:count+1
+  });
+  console.log(this.state.count);
   }
 
   handlePreviousClick = async () => {
@@ -52,12 +62,13 @@ export class News extends Component {
     let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=${
       this.state.page - 1
     }&pageSize=${this.props.pageSize}`;
+
     let data = await fetch(url); //fetching api
+
     console.log(data);
-    console.log(
-      "After fetching the url the Data needs to be extracted from it"
-    );
+    console.log("After fetching the url the Data needs to be extracted from it");
     let parsedData = await data.json();
+
     console.log(parsedData);
 
     this.setState({
@@ -65,8 +76,10 @@ export class News extends Component {
       articles: parsedData.articles,
     });
   };
+
   handleNextClick = async () => {
     console.log("Next");
+
     if(this.state.page>Math.ceil(this.state.totalResults/this.props.pageSize))
     {
 
@@ -76,12 +89,14 @@ export class News extends Component {
         let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=${
           this.state.page + 1
         }&pageSize=${this.props.pageSize}`;
+
         let data = await fetch(url); //fetching api
+
         console.log(data);
-        console.log(
-          "After fetching the url the Data needs to be extracted from it"
-        );
+        console.log("After fetching the url the Data needs to be extracted from it");
+
         let parsedData = await data.json();
+
         console.log(parsedData);
     
         this.setState({
@@ -99,7 +114,7 @@ export class News extends Component {
         <div className="row">
           {this.state.articles.map((element) => {
             return (
-              <div key={element.url} className="col-md-4">
+              <div key={element.url} style={{marginLeft:"20%", width:"60%", height:"30%"}}>
                 <NewsItem
                   title={element.title ? element.title : ""}
                   description={element.description ? element.description : ""}

@@ -1,21 +1,24 @@
+/////  CLASS BASED COMPONENTS   ////////////////////////////////////////////////////////////////////////////////
+
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
+import InfiniteScroll from "react-infinite-scroll-component";
+import NavBar from "./NavBar";
 
-// import Spinner from "./Spinner";
+import { withRouter } from "react-router-dom";
 
 export class News extends Component {
-
-  static defaultProps={
-    country:'in',
-    pageSize:8,
-    category: 'general'
-  }
-  static propTypes={
+  static defaultProps = {
+    country: "in",
+    pageSize: 8,
+    // category: "general",
+  };
+  static propTypes = {
     country: PropTypes.string,
     pageSize: PropTypes.number,
-    category: PropTypes.string
-  }
+    category: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -23,131 +26,95 @@ export class News extends Component {
     this.state = {
       articles: [],
       loading: false,
-      page: 1
+      page: 1,
+      totalResults: 0,
     };
-    document.title=this.props.category;
+
+    this.APIDomain = "https://newsapi.org/v2/";
+    document.title = props.category;
+    console.log("===>", this.props);
   }
 
-  async componentDidMount() {
+  updateNews(isMoreData = false) {
+    this.setState({ loading: true });
+    const { pageSize, page } = this.state;
+    const { country  } = this.props;
+    const url = `${this.APIDomain}top-headlines?country=${country}&category=${this.props.match.params.subcategory}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=${page}&pageSize=${pageSize}`;
+
+    fetch(url)
+      .then((data) => data.json())
+      .then((parsedData) => {
+        console.log(parsedData);
+        this.setState({
+          articles: isMoreData
+            ? [...this.state.articles, ...parsedData.articles]
+            : parsedData.articles,
+          totalResults: parsedData.totalResults,
+          loading: false,
+        });
+      })
+      .catch((err) => {
+        this.setState({ loading: false });
+      });
+  }
+
+  componentDidMount() {
     console.log("Component Did Mount");
 
-    let url =`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=1&pageSize=${this.props.pageSize}`;
-
-    let data = await fetch(url); //fetching api
-
-    console.log(data);
-
-    let parsedData = await data.json();// extracting data
-
-    console.log(parsedData);
-    let count=0;
-    this.setState({ 
-        articles: parsedData.articles,
-        totalResults: parsedData.totalResults,
-        count:count+1
-
-    });
-
-    this.setState({ 
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-      count:count+1
-  });
-  console.log(this.state.count);
+    this.updateNews();
   }
 
-  handlePreviousClick = async () => {
-    console.log("Previous");
-
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=${
-      this.state.page - 1
-    }&pageSize=${this.props.pageSize}`;
-
-    let data = await fetch(url); //fetching api
-
-    console.log(data);
-    console.log("After fetching the url the Data needs to be extracted from it");
-    let parsedData = await data.json();
-
-    console.log(parsedData);
-
-    this.setState({
-      page: this.state.page - 1,
-      articles: parsedData.articles,
+  fetchMoreData = async () => {
+    this.setState({ page: this.state.page + 1 }, () => {
+      this.updateNews(true);
     });
   };
 
-  handleNextClick = async () => {
-    console.log("Next");
-
-    if(this.state.page>Math.ceil(this.state.totalResults/this.props.pageSize))
-    {
-
-    }
-    else
-    {
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=ac0cff8d09414151b9686d8af01ed53b&page=${
-          this.state.page + 1
-        }&pageSize=${this.props.pageSize}`;
-
-        let data = await fetch(url); //fetching api
-
-        console.log(data);
-        console.log("After fetching the url the Data needs to be extracted from it");
-
-        let parsedData = await data.json();
-
-        console.log(parsedData);
-    
-        this.setState({
-          page: this.state.page + 1,
-          articles: parsedData.articles,
-        });
-    }
-  };
   render() {
     console.log("Render");
     return (
-      <div className="container my-3">
-        <h1 className="text-center" style={{margin: '35px 0px'}}>News-Top Headlines</h1>
-        {/* <Spinner/> */}
-        <div className="row">
-          {this.state.articles.map((element) => {
-            return (
-              <div key={element.url} style={{marginLeft:"20%", width:"60%", height:"30%"}}>
-                <NewsItem
-                  title={element.title ? element.title : ""}
-                  description={element.description ? element.description : ""}
-                  imageUrl={element.urlToImage}
-                  newsUrl={element.url}
-                  author={element.author}
-                  date={element.publishedAt}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className="container d-flex justify-content-between">
-          <button
-            disabled={this.state.page <= 1}
-            type="button"
-            className="btn btn-primary"
-            onClick={this.handlePreviousClick}
+      <>
+        <NavBar />
+        <div className="container my-3">
+          <h1
+            className="text-center"
+            style={{ margin: "35px 0px", marginTop: "90px" }}
           >
-            &larr; Previous
-          </button>
-          <button
-            disabled={this.state.page>Math.ceil(this.state.totalResults/this.props.pageSize)}
-            type="button"
-            className="btn btn-dark mx-2"
-            onClick={this.handleNextClick}
-          >
-            Next &rarr;
-          </button>
+            News-Top Headlines {this.props.match.params.subcategory}
+          </h1>
+          <div className="row">
+            <InfiniteScroll
+              dataLength={this.state.articles.length}
+              next={this.fetchMoreData}
+              hasMore={this.state.articles.length !== this.state.totalResults}
+              loader={<h4>Loading...</h4>}
+            >
+              {this.state.articles.map((element) => {
+                return (
+                  <div key={element.url}>
+                    <NewsItem
+                      title={element.title ? element.title : ""}
+                      description={
+                        element.description ? element.description : ""
+                      }
+                      imageUrl={element.urlToImage}
+                      newsUrl={element.url}
+                      author={element.author}
+                      date={element.publishedAt}
+                    />
+                  </div>
+                );
+              })}
+            </InfiniteScroll>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 }
 
-export default News;
+export default withRouter(News);
+
+// const setCookie = (name, value, days = 7, path = '/') => { const expires = new Date(Date.now() + days * 864e5).toUTCString() document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path } const getCookie = (name) => { return document.cookie.split('; ').reduce((r, v) => { const parts = v.split('=') return parts[0] === name ? decodeURIComponent(parts[1]) : r }, '') } const deleteCookie = (name, path) => { setCookie(name, '', -1, path) }
+
+// Send a message

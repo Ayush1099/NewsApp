@@ -1,10 +1,9 @@
-// ///  CLASS BASED COMPONENT  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
     let { title, description, imageUrl, newsUrl, author, date } = this.props;
+
     return (
       <div className="card my-3 center">
         <img
@@ -13,10 +12,9 @@ export class NewsItem extends Component {
               ? "https://timesofindia.indiatimes.com/photo/msid-88877705"
               : imageUrl
           }
-          className="card-img-top "
+          className="card-img-top"
           alt="..."
-          // width="20%"
-          height="300"
+          height="250"
         />
         <div className="card-body">
           <h5 className="card-title">{title}</h5>

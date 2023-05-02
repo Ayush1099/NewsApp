@@ -1,5 +1,4 @@
 import { Route, Redirect } from "react-router-dom";
-import Routes from "./Routes";
 import Authentication from "./Authentication";
 
 const ProtectedNews = ({ component: Component, ...rest }) => {

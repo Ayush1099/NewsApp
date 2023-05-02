@@ -1,126 +1,107 @@
-// /////////  CLASS BASED COMPONENT   //////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Redirect, browserHistory } from "react-router-dom";
 import Cookies from "js-cookie";
-// import PropTypes from 'prop-types';
-import Authentication from "./Authentication";
+import { withRouter } from "react-router-dom";
+import "./NavBar.css";
 
 export class NavBar extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   redirect: true,
-    //   authentication: true,
-    // };
-    // this.handleClick = this.handleClick.bind(this);
-    this.setRedirect = this.setRedirect.bind(this);
+    this.state = {
+      redirect: true,
+      showMediaIcons: false,
+    };
+    this.renderRedirect = this.renderRedirect.bind(this);
+    this.sideNavbar = this.sideNavbar.bind(this);
   }
 
-  setRedirect = () => {
-    this.setState({
-      redirect: false,
-      authentication: false,
-    });
-    Cookies.remove("user");
-    return <Redirect to="/login" />;
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      Cookies.remove("Ayush");
+      this.props.history.push("/login");
+    }
   };
-  // renderRedirect = () => {
-  //   if (!this.state.redirect) {
-  //     Cookies.remove("user");
-  //     return <Redirect to="/login" />;
-  //   }
-  // };
 
-  // LogOut() {
-  //   Authentication.logout(() => {
-  //     Cookies.remove("user");
-  //     // return <Redirect to="/login" />;
-  //     this.props.history.push("/login");
-  //   });
-  // }
-
-  // handleClick() {
-  //   this.LogOut();
-  // }
+  sideNavbar = () => {
+    var x = document.getElementById("myTopnav");
+    if (x.className === "topnav") {
+      x.className += " responsive";
+    } else {
+      x.className = "topnav";
+    }
+  };
 
   render() {
     return (
-      <div>
-        <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-          <div className="container-fluid">
+      <div className="topnav fixed-top navbar-expand-lg" id="myTopnav">
+        <ul className="nav me-auto mb-2 mb-lg-0">
+          <li onClick={this.props.handleNewsType} className="nav-item">
             <Link className="navbar-brand" to="/news/general">
               News App
             </Link>
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    aria-current="page"
-                    to="/news/general"
-                  >
-                    Home
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/business">
-                    Business
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/entertainment">
-                    Entertainment
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/general">
-                    General
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/health">
-                    Health
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/science">
-                    Science
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/sports">
-                    Sports
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/news/technology">
-                    Technology
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="form-group">
-            {/* {this.renderRedirect()} */}
-            <button
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/business">
+              Business
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/entertainment">
+              Entertainment
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/general">
+              General
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/health">
+              Health
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/science">
+              Science
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/sports">
+              Sports
+            </Link>
+          </li>
+
+          <li onClick={this.props.handleNewsType} className="nav-item">
+            <Link className="nav-link" to="/news/technology">
+              Technology
+            </Link>
+          </li>
+
+          <li className="icon" onClick={this.sideNavbar}>
+            <a className="icon">
+              <i className="fa fa-bars"></i>
+            </a>
+          </li>
+          <li>
+            <a
               type="submit"
-              style={{ width: "100%" }}
-              className="btn btn-primary btn-sm"
-              onClick={this.handleClick}
-              onClick={!this.authentication ? this.setRedirect : "do nothing"}
+              className="btn-primary"
+              id="submit"
+              onClick={() => this.renderRedirect()}
             >
               Log Out
-            </button>
-          </div>
-        </nav>
+            </a>
+          </li>
+        </ul>
       </div>
     );
   }
 }
 
-export default NavBar;
+export default withRouter(NavBar);

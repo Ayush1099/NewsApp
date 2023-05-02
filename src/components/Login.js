@@ -1,14 +1,7 @@
 import React from "react";
 import "./LoginStyle.css";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
-import Routes from "./Routes";
 import Cookies from "js-cookie";
-import Authentication from "./Authentication";
+import { withRouter } from "react-router-dom";
 
 class Login extends React.Component {
   constructor(props) {
@@ -32,25 +25,12 @@ class Login extends React.Component {
     });
   };
 
-  renderRedirect=()=> {
+  renderRedirect = () => {
     if (this.state.redirect) {
-      console.log("Render Redirect in Login");
-      Cookies.set("user", "loginTrue");
-      console.log("===>>>authentication in Login :  ",this.state.authentication);
-
-      console.log("After setting the Cookies");
-      this.props.parentCallback(this.state.authentication);
-
-      return (
-        <>
-          {/* <Routes authentication={this.state.authentication} /> */}
-          <Redirect to="/news/general" />
-        </>
-      );
-
-      // event.preventDefault();
+      Cookies.set("Ayush", "Verma");
+      this.props.history.push("/news/general");
     }
-  }
+  };
 
   handleChange(e) {
     let fields = this.state.fields;
@@ -58,25 +38,23 @@ class Login extends React.Component {
     this.setState({ fields });
   }
 
-  // login() {
-  //   Authentication.login(() => {
-  //     Cookies.set("user", "loginTrue");
-  //     // this.props.history.push("/news/general");
-  //
-  //   });
-  // }
-
   submituserRegistrationForm(e) {
     e.preventDefault();
 
-    const {authentication, redirect, formfieldvalidation}=this.validateForm();
+    const { formfieldvalidation, errors } = this.validateForm();
 
     if (formfieldvalidation) {
       let fields = {};
       fields["username"] = "";
       fields["password"] = "";
-      this.setState({ fields: fields, authentication: true, redirect: true },()=>{this.renderRedirect()});
-
+      this.setState(
+        { fields: fields, authentication: true, redirect: true },
+        () => {
+          this.renderRedirect();
+        }
+      );
+    } else {
+      this.setState({ errors });
     }
   }
 
@@ -84,9 +62,7 @@ class Login extends React.Component {
     let fields = this.state.fields;
     let errors = {};
     let formIsValid = true;
-
-    const response={authentication:false,redirect:false,  errors:""}
-
+    const response = { authentication: false, redirect: false, errors: "" };
     if (!fields["username"]) {
       formIsValid = false;
       errors["username"] = "*Please enter your username.";
@@ -96,12 +72,8 @@ class Login extends React.Component {
       formIsValid = false;
       errors["password"] = "*Please enter your password.";
     }
-
-    // if (formIsValid === true) {
-    //   this.setState({ authentication: true, redirect: true });
-    // }
-    response.errors=errors;
-    response.formfieldvalidation=formIsValid;
+    response.errors = errors;
+    response.formfieldvalidation = formIsValid;
 
     return response;
   }
@@ -144,7 +116,6 @@ class Login extends React.Component {
             <div className="errorMsg">{this.state.errors.password}</div>
 
             <div className="form-group">
-              {/* {this.renderRedirect()} */}
               <button
                 type="submit"
                 style={{ width: "100%" }}
@@ -160,4 +131,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

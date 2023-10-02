@@ -1,107 +1,65 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Cookies from "js-cookie";
-import { withRouter } from "react-router-dom";
-import "./NavBar.css";
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React from 'react'
+import { Nav, NavLink, NavbarContainer, Span, NavItems, MobileIcon, MobileMenu, MobileLink } from './NavbarStyledComponent'
+import { DiCssdeck } from 'react-icons/di';
+import { FaBars } from 'react-icons/fa';
 
-export class NavBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirect: true,
-      showMediaIcons: false,
-    };
-    this.renderRedirect = this.renderRedirect.bind(this);
-    this.sideNavbar = this.sideNavbar.bind(this);
-  }
-
-  renderRedirect = () => {
-    if (this.state.redirect) {
-      Cookies.remove("Ayush");
-      this.props.history.push("/login");
-    }
-  };
-
-  sideNavbar = () => {
-    var x = document.getElementById("myTopnav");
-    if (x.className === "topnav") {
-      x.className += " responsive";
-    } else {
-      x.className = "topnav";
-    }
-  };
-
-  render() {
-    return (
-      <div className="topnav fixed-top navbar-expand-lg" id="myTopnav">
-        <ul className="nav me-auto mb-2 mb-lg-0">
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="navbar-brand" to="/news/general">
-              News App
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/business">
-              Business
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/entertainment">
-              Entertainment
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/general">
-              General
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/health">
-              Health
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/science">
-              Science
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/sports">
-              Sports
-            </Link>
-          </li>
-
-          <li onClick={this.props.handleNewsType} className="nav-item">
-            <Link className="nav-link" to="/news/technology">
-              Technology
-            </Link>
-          </li>
-
-          <li className="icon" onClick={this.sideNavbar}>
-            <a className="icon">
-              <i className="fa fa-bars"></i>
-            </a>
-          </li>
-          <li>
-            <a
-              type="submit"
-              className="btn-primary"
-              id="submit"
-              onClick={() => this.renderRedirect()}
-            >
-              Log Out
-            </a>
-          </li>
-        </ul>
-      </div>
-    );
-  }
+const Navbar = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  return (
+    <Nav> 
+      <NavbarContainer>
+        <NavLink href='/news/general'>
+          <a style={{ display: "flex", alignItems: "center", marginBottom: '20;', cursor: 'pointer' }}>
+            <DiCssdeck size="3rem" /> <Span>News App</Span>
+          </a>
+        </NavLink>
+        <MobileIcon>
+          <FaBars onClick={() => {
+            setIsOpen(!isOpen)
+          }} />
+        </MobileIcon>
+        <NavItems>
+          <NavLink href="/news/business">Business</NavLink>
+          <NavLink href="/news/entertainment">Entertainment</NavLink>
+          <NavLink href="/news/general">General</NavLink>
+          <NavLink href="/news/health">Health</NavLink>
+          <NavLink href="/news/science">Science</NavLink>
+          <NavLink href="/news/sports">Sports</NavLink>
+          <NavLink href="/news/technology">Technology</NavLink>
+        </NavItems>
+        {
+          isOpen &&
+          <MobileMenu isOpen={isOpen}>
+            <MobileLink href="/news/general" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>News App</MobileLink>
+            <MobileLink href="/news/business" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Business</MobileLink>
+            <MobileLink href="/news/entertainment" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Entertainment</MobileLink>
+            <MobileLink href="/news/general" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>General</MobileLink>
+            <MobileLink href="/news/health" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Health</MobileLink>
+            <MobileLink href="/news/science" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Science</MobileLink>
+            <MobileLink href="/news/sports" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Sports</MobileLink>
+            <MobileLink href="/news/technology" onClick={() => {
+              setIsOpen(!isOpen)
+            }}>Technology</MobileLink>
+          </MobileMenu>
+        }
+      </NavbarContainer>
+    </Nav>
+  )
 }
 
-export default withRouter(NavBar);
+export default Navbar

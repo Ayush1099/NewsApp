@@ -1,15 +1,11 @@
-// //////////CLASS BASED COMPONENTS///////////////////////////////////////////////////////////
-
-import React, { Component } from "react";
+import React from "react";
 import Routes from "./components/Routes";
 
-export default class App extends Component {
-
-  render() {
+const App = () => {
     return (
       <div>
         <Routes/>
       </div>
     );
-  }
 }
+export default App

@@ -1,28 +1,17 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Switch
-} from "react-router-dom";
-import Login from "./Login";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import News from "./News";
-import ProtectedRoute from "./ProtectedRoute";
-import ProtectedLogin from "./ProtectedLogin";
 
-export class Routes extends Component {
+export class RouteComponent extends Component {
 
   render() {
     return (
-      <div>
         <Router>
-          <Switch>
-            <ProtectedRoute exact path="/news/:subcategory" component={News} />
-            <ProtectedRoute exact path="/news" component={News} />
-            <ProtectedLogin exact path="/login" component={Login} />
-          </Switch>
+            <Route exact path="/news/:subcategory" component={News}/>
+            <Route exact path="/news" component={News} />
         </Router>
-      </div>
     );
   }
 }
 
-export default Routes;
+export default RouteComponent;

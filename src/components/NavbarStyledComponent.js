@@ -2,12 +2,11 @@ import { Link as LinkR } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const Nav = styled.div`
-    background: #303036
+    background-color: rgba(200, 200, 200, 0.7);
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -39,7 +38,6 @@ export const NavItems = styled.ul`
     gap: 32px;
     padding: 0 6px;
     list-style: none;
-
     @media screen and (max-width: 768px) {
       display: none;
     }
@@ -49,6 +47,7 @@ export const NavLink = styled.a`
     font-weight: 500;
     color: black;
     width: 80%;
+    font-size: 18px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
@@ -86,6 +85,7 @@ export const MobileIcon = styled.div`
   }
 `
 export const MobileMenu = styled.div`
+background-color: rgba(200, 200, 200, 0.7);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -95,7 +95,6 @@ export const MobileMenu = styled.div`
     right: 0;
     width: 100%;
     padding: 12px 40px 24px 40px;
-    background: ${({ theme }) => theme.card_light+99};
     transition: all 0.6s ease-in-out;
     transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(-100%)')};
     border-radius: 0 0 20px 20px;

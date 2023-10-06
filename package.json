@@ -1,5 +1,5 @@
 {
-  "homepage": "https://ayush1099.github.io/NewsApp/",
+  "homepage": "http://localhost:3000/news/general",
   "name": "news-app",
   "version": "0.1.0",
   "private": true,

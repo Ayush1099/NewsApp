@@ -1,16 +1,19 @@
 .row{
-  width: 80%; 
+  width: 60%; 
   margin-left: auto; 
   margin-right :auto;
 }
 @media(max-width: 768px){
+  h1{
+    margin-top: "90px";
+  }
   .row{
     width: 100%; 
-    margin-top: 10%;
+    margin-top: 20%;
   }
   .card .card-text .text-muted{
     width:200%;
-    height: 20%;
+    height: 30%;
     margin-left: auto;
     margin-right: auto;
   }

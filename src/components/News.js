@@ -1,3 +1,4 @@
+/* eslint-disable react/style-prop-object */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import NewsItem from "./NewsItem";
@@ -12,34 +13,33 @@ const News = (props) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const APIDomain = "https://newsapi.org/v2/";
+  const APIDomain = "https://newsapi.org/v2/top-headlines";
   const APIKey = "ac0cff8d09414151b9686d8af01ed53b";
 
   useEffect(() => {
     updateNews();
   }, [])
-  
+
   const updateNews = async (isMoreData = false) => {
 
-    const url = `${APIDomain}top-headlines?country=${props.country}&category=${props.match.params.subcategory}&apiKey=${APIKey}&page=${page}&pageSize=${props.pageSize}`;
+    const url = `${APIDomain}?country=${props.country}&category=${props.match.params.subcategory}&apiKey=${APIKey}&page=${page}&pageSize=${props.pageSize}`;
 
     setLoading(true);
-    
-    fetch(url)
-    .then((data) => data.json())
-    .then((parsedData) => {
-      setArticles(isMoreData? [...articles, ...parsedData.articles]: parsedData.articles);
-      setTotalResults( parsedData.totalResults);
-      setLoading(false) 
-    })
-    .catch((err)=>{
-      setLoading(false);
-    })
-    setPage(page+1);
+
+    await fetch(url)
+      .then((data) => data.json())
+      .then((parsedData) => {
+        setArticles(isMoreData ? [...articles, ...parsedData.articles] : parsedData.articles);
+        setTotalResults(parsedData.totalResults);
+        setLoading(false)
+      })
+      .catch((err) => {
+        setLoading(false);
+      })
+    setPage(page + 1);
   }
 
   const fetchMoreData = async () => {
-    setPage(page+1);
     updateNews(true);
   };
 
@@ -54,34 +54,34 @@ const News = (props) => {
   return (
     <>
       <NavBar handleNewsType={handleNewsClick} />
-      <div className="container my-3">
-        {loading && <Spinner />}
-        <div className="row">
-          <InfiniteScroll
-            dataLength={articles.length}
-            next={fetchMoreData}
-            hasMore={articles.length !== totalResults}
-            loader={<Spinner />}
-          >
-            {articles.map((element) => {
-              return (
-                <>
-                  <div key={element.url}>
-                    <NewsItem
-                      title={element.title ? element.title : ""}
-                      description={element.description ? element.description : ""}
-                      imageUrl={element.urlToImage}
-                      newsUrl={element.url}
-                      author={element.author}
-                      date={element.publishedAt}
-                    />
-                  </div>
-                </>
-              );
-            })}
-          </InfiniteScroll>
+      {loading && <Spinner />}
+        <div className="container my-3">
+          <div className="row">
+            <InfiniteScroll
+              dataLength={articles.length}
+              next={fetchMoreData}
+              hasMore={articles.length !== totalResults}
+              loader={<Spinner />}
+            >
+              {articles.map((element) => {
+                return (
+                  <>
+                    <div key={element.url}>
+                      <NewsItem
+                        title={element.title ? element.title : ""}
+                        description={element.description ? element.description : ""}
+                        imageUrl={element.urlToImage}
+                        newsUrl={element.url}
+                        author={element.author}
+                        date={element.publishedAt}
+                      />
+                    </div>
+                  </>
+                );
+              })}
+            </InfiniteScroll>
+          </div>
         </div>
-      </div>
     </>
   );
 }

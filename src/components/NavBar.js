@@ -30,10 +30,7 @@ const Navbar = () => {
         </NavItems>
         {
           isOpen &&
-          <MobileMenu isOpen={isOpen} >
-            <MobileLink href="/news/general" onClick={() => {
-              setIsOpen(!isOpen)
-            }}>News App</MobileLink>
+          <MobileMenu isOpen={isOpen}>
             <MobileLink href="/news/business" onClick={() => {
               setIsOpen(!isOpen)
             }}>Business</MobileLink>

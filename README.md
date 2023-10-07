@@ -1,5 +1,6 @@
 ## Introduction
-This is a News Application which shows Daily news of various categories. The news are fetched using a third party news API.
+This is a News Application which shows Daily news of various categories.
+![Alt text](<src/Image/News Image.png>)
 
 ## Technologies Used
 - React JS: A JavaScript library for building user interfaces.

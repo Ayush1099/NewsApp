@@ -1,6 +1,9 @@
 ## Introduction
-This is a News Application which shows Daily news of various categories.
+React News Web Application
 ![Alt text](<src/Image/News Image.png>)
+
+## Description:
+Developed a responsive news web application using React.js that fetches and displays real-time news from external APIs.
 
 ## Technologies Used
 - React JS: A JavaScript library for building user interfaces.
